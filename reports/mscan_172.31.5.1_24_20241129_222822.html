@@ -1,0 +1,260 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Mscan Scan Report</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+            <style>
+                .vulnerability { color: #dc3545; }
+                .service { color: #0d6efd; }
+                .technology { color: #198754; }
+            </style>
+        </head>
+        <body>
+            <div class="container mt-5">
+                <h1 class="mb-4">Mscan Scan Report</h1>
+                <p class="text-muted">Generated at: 2024-11-29 22:28:22</p>
+                
+                <!-- Web Services -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Web Services</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="webTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Target</th>
+                                    <th>Title</th>
+                                    <th>Server</th>
+                                    <th>Technologies</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                <tr>
+                    <td><a href="http://172.31.5.66:80" target="_blank">http://172.31.5.66:80</a></td>
+                    <td>登录</td>
+                    <td class="service">Microsoft-IIS/7.5</td>
+                    <td class="technology">Bootstrap, IIS, ASP.NET, jQuery</td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.171:80" target="_blank">http://172.31.5.171:80</a></td>
+                    <td>Web Page</td>
+                    <td class="service">Unknown</td>
+                    <td class="technology"></td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="https://172.31.5.171:443" target="_blank">https://172.31.5.171:443</a></td>
+                    <td>Web Page</td>
+                    <td class="service">Unknown</td>
+                    <td class="technology"></td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.100:8000" target="_blank">http://172.31.5.100:8000</a></td>
+                    <td>飞牛私有云fnOS</td>
+                    <td class="service">nginx</td>
+                    <td class="technology">Nginx</td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.100:80" target="_blank">http://172.31.5.100:80</a></td>
+                    <td>飞牛私有云fnOS</td>
+                    <td class="service">nginx</td>
+                    <td class="technology">Nginx</td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="https://172.31.5.100:443" target="_blank">https://172.31.5.100:443</a></td>
+                    <td>飞牛私有云fnOS</td>
+                    <td class="service">nginx</td>
+                    <td class="technology">Nginx</td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.220:80" target="_blank">http://172.31.5.220:80</a></td>
+                    <td>Drcom上网登录窗</td>
+                    <td class="service">DrcomServer1.0</td>
+                    <td class="technology"></td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="https://172.31.5.220:443" target="_blank">https://172.31.5.220:443</a></td>
+                    <td>Drcom上网登录窗</td>
+                    <td class="service">DrcomServer1.0</td>
+                    <td class="technology"></td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.30:80" target="_blank">http://172.31.5.30:80</a></td>
+                    <td>串口服务器参数配置</td>
+                    <td class="service">ZQWL-WebServer-v1.0</td>
+                    <td class="technology"></td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.135:80" target="_blank">http://172.31.5.135:80</a></td>
+                    <td>Welcome to nginx!</td>
+                    <td class="service">nginx/1.18.0 (Ubuntu)</td>
+                    <td class="technology">Nginx</td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.135:8000" target="_blank">http://172.31.5.135:8000</a></td>
+                    <td>巡风</td>
+                    <td class="service">Werkzeug/0.14.1 Python/2.7.6</td>
+                    <td class="technology">Bootstrap, jQuery</td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.252:80" target="_blank">http://172.31.5.252:80</a></td>
+                    <td>Web user login</td>
+                    <td class="service">Httpd</td>
+                    <td class="technology"></td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.136:8080" target="_blank">http://172.31.5.136:8080</a></td>
+                    <td>Apache Tomcat/7.0.42</td>
+                    <td class="service">Apache-Coyote/1.1</td>
+                    <td class="technology">Apache</td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.136:80" target="_blank">http://172.31.5.136:80</a></td>
+                    <td>Web Page</td>
+                    <td class="service">nginx/1.14.2</td>
+                    <td class="technology">Nginx</td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="http://172.31.5.173:80" target="_blank">http://172.31.5.173:80</a></td>
+                    <td>Web Page</td>
+                    <td class="service">nginx</td>
+                    <td class="technology">Nginx</td>
+                    <td>200</td>
+                </tr>
+            
+
+                <tr>
+                    <td><a href="https://172.31.5.173:443" target="_blank">https://172.31.5.173:443</a></td>
+                    <td>Web Page</td>
+                    <td class="service">nginx</td>
+                    <td class="technology">Nginx</td>
+                    <td>200</td>
+                </tr>
+            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SSH Services -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">SSH Services</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="sshTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Target</th>
+                                    <th>Port</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                    <tr>
+                        <td>172.31.5.135</td>
+                        <td>22</td>
+                        <td>root</td>
+                        <td>1</td>
+                    </tr>
+                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Vulnerabilities -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Vulnerabilities</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="vulnTable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Target</th>
+                                    <th>Type</th>
+                                    <th>Severity</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    $('#webTable').DataTable({
+                        "order": [[0, "asc"]],
+                        "pageLength": 25
+                    });
+                    $('#sshTable').DataTable({
+                        "order": [[0, "asc"]],
+                        "pageLength": 25
+                    });
+                    $('#vulnTable').DataTable({
+                        "order": [[2, "desc"]],
+                        "pageLength": 25
+                    });
+                });
+            </script>
+        </body>
+        </html>
+        
