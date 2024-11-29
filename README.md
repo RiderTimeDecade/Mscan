@@ -35,3 +35,47 @@ Mscan 是一个功能强大的安全扫描工具，集成了端口扫描、Web �
   - 技术组件分析
 
 ## 项目结构
+
+- **src/**: 源代码目录
+- **tests/**: 测试用例目录
+- **docs/**: 文档目录
+- **requirements.txt**: 项目依赖文件
+- **README.md**: 项目说明文件
+
+## 安装与使用
+
+1. 克隆项目：
+   ```bash
+   git clone https://github.com/yourusername/mscan.git
+   cd mscan
+   ```
+
+2. 安装依赖：
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. 运行工具：
+   ```bash
+   python mscan.py
+   ```
+
+## 使用示例
+
+在运行工具后，您可以使用以下命令进行端口扫描：
+```bash
+python mscan.py -p 80,443 -t 192.168.1.1
+```
+这将扫描目标 IP 的 80 和 443 端口。
+
+## 贡献
+
+欢迎任何形式的贡献！请查看 [贡献指南](CONTRIBUTING.md) 以获取更多信息。
+
+## 许可证
+
+本项目采用 MIT 许可证，详细信息请查看 [LICENSE](LICENSE) 文件。
+
+## 联系方式
+
+如有任何问题或建议，请联系作者 mzq，邮箱: mzq@example.com。
