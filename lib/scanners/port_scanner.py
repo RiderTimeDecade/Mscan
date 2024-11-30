@@ -181,7 +181,8 @@ class IPScanner:
 
     def scan_port(self, ip: str, port: int) -> bool:
         """扫描单个端口"""
-        if self.check_port(ip, port):
+        is_open, _ = self.check_port(ip, port)  # 忽略响应时间
+        if is_open:
             with self._lock:
                 self.results[ip].add(port)
             service = self.get_service_name(port)
@@ -192,12 +193,21 @@ class IPScanner:
     def scan_ip(self, ip: str, ports: List[int]) -> None:
         """扫描单个IP的所有端口"""
         try:
+            # 首先检查主机是否存活
+            if not self.ping(ip):
+                with self._lock:
+                    self.scanned_ips += 1
+                return
+
+            print(f"{Fore.GREEN}[+] {ip} is alive{Style.RESET_ALL}")
+            
             # 创建该IP的线程池
             with ThreadPoolExecutor(max_workers=min(len(ports), 50)) as executor:
                 # 为每个端口创建一个任务
                 futures = [executor.submit(self.scan_port, ip, port) for port in ports]
                 # 等待所有端口扫描完成
                 concurrent.futures.wait(futures)
+                
         finally:
             with self._lock:
                 self.scanned_ips += 1
@@ -209,7 +219,7 @@ class IPScanner:
         try:
             # Windows系统
             if platform.system().lower() == 'windows':
-                # 使用ping命令，-n 1表示发送1个包，-w表示超时时间(毫秒)
+                # 使用ping命令，-n 1表示��送1个包，-w表示超时时间(毫秒)
                 cmd = f'ping -n 1 -w {int(timeout*1000)} {ip}'
                 return subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0
             # Linux/Mac系统
@@ -264,35 +274,61 @@ class IPScanner:
         if isinstance(targets, str):
             targets = [targets]
 
+        # 解析所有目标IP
         for target in targets:
             ip_list.extend(list(self.parse_ip_input(target)))
 
-        # 首先进行主机发现
-        alive_hosts = self.discover_hosts(ip_list)
-        if not alive_hosts:
-            print(f"{Fore.RED}[!] No alive hosts found.{Style.RESET_ALL}")
-            return {}
+        self.total_ips = len(ip_list)
+        print(f"\n{Fore.YELLOW}[*] Starting host discovery for {self.total_ips} targets...{Style.RESET_ALL}\n")
 
-        self.total_ips = len(alive_hosts)
-        print(f"\n{Fore.YELLOW}[*] Starting port scan of {self.total_ips} alive hosts ({len(ports)} ports){Style.RESET_ALL}\n")
-
+        # 先进行主机存活探测
+        alive_hosts = set()
         try:
-            # 为每个IP创建一个线程
             with ThreadPoolExecutor(max_workers=self.threads) as executor:
-                # 提交所有IP的扫描任务
                 futures = []
-                for ip in alive_hosts:
-                    futures.append(executor.submit(self.scan_ip, ip, ports))
-
-                # 等待所有IP扫描完成
-                for future in concurrent.futures.as_completed(futures):
+                for ip in ip_list:
+                    futures.append(executor.submit(self.ping, ip))
+                
+                for ip, future in zip(ip_list, futures):
                     try:
-                        future.result()  # 获取结果，处理可能的异常
+                        if future.result():
+                            alive_hosts.add(ip)
+                            print(f"{Fore.GREEN}[+] {ip} is alive{Style.RESET_ALL}")
                     except Exception as e:
-                        self.logger.error(f"Error scanning IP: {str(e)}")
+                        self.logger.error(f"Error checking host {ip}: {str(e)}")
 
         except KeyboardInterrupt:
-            print(f"\n{Fore.RED}[!] Scan interrupted by user{Style.RESET_ALL}")
+            print(f"\n{Fore.RED}[!] Host discovery interrupted by user{Style.RESET_ALL}")
+            return {}
 
-        print(f"\n{Fore.BLUE}[*] Port scan completed.{Style.RESET_ALL}\n")
+        if not alive_hosts:
+            print(f"\n{Fore.YELLOW}[!] No alive hosts found{Style.RESET_ALL}")
+            return {}
+
+        # 开始端口扫描
+        print(f"\n{Fore.YELLOW}[*] Starting port scan for {len(alive_hosts)} alive hosts ({len(ports)} ports){Style.RESET_ALL}\n")
+
+        try:
+            with ThreadPoolExecutor(max_workers=self.threads) as executor:
+                futures = []
+                for ip in alive_hosts:
+                    for port in ports:
+                        futures.append(executor.submit(self.scan_port, ip, port))
+                
+                # 等待所有端口扫描完成
+                concurrent.futures.wait(futures)
+
+        except KeyboardInterrupt:
+            print(f"\n{Fore.RED}[!] Port scan interrupted by user{Style.RESET_ALL}")
+
+        # 打印扫描统计信息
+        hosts_with_ports = len(self.results)
+        total_open_ports = sum(len(ports) for ports in self.results.values())
+        
+        if hosts_with_ports > 0:
+            print(f"\n{Fore.BLUE}[*] Scan completed:")
+            print(f"    Alive hosts: {len(alive_hosts)}")
+            print(f"    Hosts with open ports: {hosts_with_ports}")
+            print(f"    Total open ports: {total_open_ports}{Style.RESET_ALL}\n")
+
         return dict(self.results) 

@@ -114,4 +114,8 @@ PORT_MAP = {
 
 # SSH爆破配置
 DEFAULT_SSH_USER_FILE = 'data/users.txt'
-DEFAULT_SSH_PASS_FILE = 'data/passwords.txt' 
+DEFAULT_SSH_PASS_FILE = 'data/passwords.txt'
+
+# FTP爆破配置
+DEFAULT_FTP_USER_FILE = 'data/ftp_users.txt'
+DEFAULT_FTP_PASS_FILE = 'data/ftp_passwords.txt' 

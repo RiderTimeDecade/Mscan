@@ -16,6 +16,7 @@ sys.path.append(ROOT_DIR)
 from lib.scanners.port_scanner import IPScanner
 from lib.scanners.web_scanner import CMSScanner
 from lib.scanners.ssh_scanner import SSHBruteforce
+from lib.scanners.ftp_scanner import FTPBruteforce
 from lib.utils.logger import setup_logger
 from lib.utils.output import OutputFormatter
 from config.settings import *
@@ -44,11 +45,14 @@ def parse_args():
     module_group = parser.add_argument_group('Modules')
     module_group.add_argument('--no-web', action='store_true', help='Skip web detection')
     module_group.add_argument('--no-ssh', action='store_true', help='Skip SSH bruteforce')
+    module_group.add_argument('--no-ftp', action='store_true', help='Skip FTP bruteforce')
     
     # 爆破选项
     brute_group = parser.add_argument_group('Brute Force')
     brute_group.add_argument('--user-file', help='Custom username file for SSH bruteforce')
     brute_group.add_argument('--pass-file', help='Custom password file for SSH bruteforce')
+    brute_group.add_argument('--ftp-user-file', help='Custom FTP username file')
+    brute_group.add_argument('--ftp-pass-file', help='Custom FTP password file')
     
     # 输出选项
     output_group = parser.add_argument_group('Output')
@@ -73,6 +77,7 @@ def main():
         'ports': {},
         'web': {},
         'ssh': {},
+        'ftp': {},
         'vulnerabilities': []
     }
     
@@ -109,6 +114,21 @@ def main():
                             passfile=args.pass_file
                         )
                         all_results['ssh'].update(ssh_results)
+                
+                # FTP爆破
+                if not args.no_ftp:
+                    ftp_ports = {}
+                    for ip, ports in scan_results.items():
+                        ftp_ports[ip] = {port for port in ports if port in {21, 2121}}
+                    
+                    if ftp_ports:
+                        ftp_scanner = FTPBruteforce(threads=args.threads)
+                        ftp_results = ftp_scanner.scan(
+                            ftp_ports,
+                            userfile=args.ftp_user_file,
+                            passfile=args.ftp_pass_file
+                        )
+                        all_results['ftp'].update(ftp_results)
         
         # URL扫描
         if args.url:
