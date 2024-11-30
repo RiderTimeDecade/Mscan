@@ -14,6 +14,7 @@ import subprocess
 import platform
 import os
 from concurrent.futures import ThreadPoolExecutor
+from config.settings import THREADS
 
 # 初始化colorama
 init()
@@ -54,8 +55,8 @@ class IPScanner:
         27017: 'MongoDB'
     }
 
-    def __init__(self, threads: int = 10):
-        self.threads = threads
+    def __init__(self, threads=None):
+        self.threads = threads or THREADS
         self.logger = logging.getLogger("IPScanner")
         self.total_ips = 0
         self.scanned_ips = 0

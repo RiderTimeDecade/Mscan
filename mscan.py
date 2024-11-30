@@ -4,6 +4,10 @@ import os
 import argparse
 import logging
 from datetime import datetime
+from colorama import init, Fore, Style
+
+# 初始化 colorama
+init()
 
 # 添加项目根目录到 Python 路径
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -66,6 +70,7 @@ def main():
     
     # 存储所有扫描结果
     all_results = {
+        'ports': {},
         'web': {},
         'ssh': {},
         'vulnerabilities': []
@@ -74,7 +79,6 @@ def main():
     try:
         # 端口扫描
         if args.ip:
-            # 使用预定义模式或自定义端口
             ports_str = DEFAULT_PORTS[args.mode] if args.mode else args.ports
             ports = [int(p.strip()) for p in ports_str.split(',')]
             
@@ -82,6 +86,9 @@ def main():
             scan_results = port_scanner.scan(args.ip, ports)
             
             if scan_results:
+                # 保存端口扫描结果
+                all_results['ports'] = scan_results
+                
                 # Web服务识别
                 if not args.no_web:
                     web_scanner = CMSScanner()

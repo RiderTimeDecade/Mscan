@@ -5,5 +5,4 @@ beautifulsoup4>=4.9.3
 chardet>=4.0.0
 colorama>=0.4.4
 tqdm>=4.62.3
-sqlite3
 ipaddress>=1.0.23 

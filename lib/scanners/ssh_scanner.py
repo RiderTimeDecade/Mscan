@@ -8,13 +8,14 @@ import time
 import socket
 import logging
 from lib.utils.logger import setup_logger
+from config.settings import THREADS, DEFAULT_SSH_USER_FILE, DEFAULT_SSH_PASS_FILE
 
 # 禁用 paramiko 的警告日志
 logging.getLogger('paramiko').setLevel(logging.CRITICAL)
 
 class SSHBruteforce:
-    def __init__(self, threads: int = 10):
-        self.threads = threads
+    def __init__(self, threads=None):
+        self.threads = threads or THREADS
         self._lock = threading.Lock()
         self.results = {}
         self.total_attempts = 0
@@ -166,18 +167,11 @@ class SSHBruteforce:
         
         return self.try_login(ip, port, username, password)
 
-    def scan(self, ssh_ports: Dict[str, Set[int]], userfile: str = None, passfile: str = None) -> Dict:
-        """执行SSH爆破"""
-        if userfile:
-            with open(userfile) as f:
-                self.default_users = [line.strip() for line in f if line.strip()]
-        
-        if passfile:
-            with open(passfile) as f:
-                self.default_passwords = [line.strip() for line in f if line.strip()]
-
+    def scan(self, targets, userfile=None, passfile=None):
+        self.userfile = userfile or DEFAULT_SSH_USER_FILE
+        self.passfile = passfile or DEFAULT_SSH_PASS_FILE
         # 计算总尝试次数
-        total_targets = sum(len(ports) for ports in ssh_ports.values())
+        total_targets = sum(len(ports) for ports in targets.values())
         self.total_attempts = total_targets * len(self.default_users) * len(self.default_passwords)
         self.current_attempts = 0
         self.errors = 0
@@ -194,7 +188,7 @@ class SSHBruteforce:
             # 为每个目标创建独立的扫描线程
             with ThreadPoolExecutor(max_workers=self.threads) as executor:
                 futures = []
-                for ip, ports in ssh_ports.items():
+                for ip, ports in targets.items():
                     for port in ports:
                         futures.append(
                             executor.submit(self.scan_target, ip, port)

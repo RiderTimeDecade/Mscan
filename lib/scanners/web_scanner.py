@@ -15,12 +15,14 @@ import random
 import sys
 import concurrent.futures
 from lib.utils.http_utils import HTTPClient
+from config.settings import THREADS
 
 # 禁用 SSL 警告
 urllib3.disable_warnings()
 
 class CMSScanner:
-    def __init__(self):
+    def __init__(self, threads=None):
+        self.threads = threads or THREADS
         self.print_lock = threading.Lock()
         self.http_client = HTTPClient()
         self._lock = threading.Lock()
@@ -295,7 +297,7 @@ class CMSScanner:
             output += f"code:{result['status_code']} "
             output += f"len:{result['content_length']:<8} "
             
-            # 确保标题不是乱码
+            # 确保标题不是��码
             title = result['title']
             if not title or title == 'None':
                 title = 'Web Page'
