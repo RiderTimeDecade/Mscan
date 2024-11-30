@@ -3,7 +3,7 @@
 ![Python Version](https://img.shields.io/badge/python-3.7+-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-Mscan 是一个功能强大的安全扫描工具，集成了端口扫描、Web 服务识别、SSH 爆破等功能。
+Mscan 是一个功能强大的内网扫描工具，集成了端口扫描、Web 服务识别、SSH 爆破等功能。
 
 作者: mzq
 
