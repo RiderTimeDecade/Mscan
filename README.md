@@ -1,204 +1,185 @@
-# Mscan - 多功能安全扫描工具
+# Mscan
 
-![Python Version](https://img.shields.io/badge/python-3.7+-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+<div align="center">
 
-Mscan 是一个功能强大的内网扫描工具，集成了端口扫描、Web 服务识别、SSH 爆破等功能。
+![Logo](path/to/logo.png)
 
-作者: mzq
+一款功能强大的内网安全扫描工具，集成端口扫描、服务识别、漏洞检测等功能。
 
-## 主要功能
+[![Python Version](https://img.shields.io/badge/python-3.7+-blue)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/yourusername/mscan?style=social)](https://github.com/yourusername/mscan)
 
-- 🚀 **端口扫描**
-  - 支持 IP、CIDR、IP 范围扫描
-  - 多种预定义端口模式
-  - 智能主机存活检测
-  - 高性能并发扫描
+[English](README_EN.md) | 简体中文 | [使用文档](docs/guide.md) | [更新日志](CHANGELOG.md)
 
-- 🌐 **Web 服务识别**
-  - CMS 指纹识别
-  - Web 技术栈检测
-  - 服务器类型识别
-  - 编程语言检测
-  - 前端框架识别
+</div>
 
-- 🔑 **SSH 爆破**
-  - 智能服务识别
-  - 多线程并发爆破
-  - 自定义用户名密码字典
-  - 自动跳过无效目标
+## ✨ 特性
 
-- 📊 **HTML 报告**
+- 🚀 **高性能扫描**
+  - 智能存活检测
+  - 自适应并发控制
+  - 精准指纹识别
+  - 低误报率
+
+- 🎯 **多样化功能**
+  - 端口扫描（支持 IP、CIDR、范围）
+  - Web 服务识别（CMS、中间件、框架）
+  - SSH 弱口令检测
+  - 自定义 POC 漏洞扫描
+
+- 📊 **专业报告**
   - 美观的 Web 界面
-  - 可搜索的数据表格
-  - 详细的扫描结果
-  - 技术组件分析
+  - 可交互数据表格
+  - 详细扫描结果
+  - 资产统计分析
 
-## 安装说明
+## 🚀 快速开始
 
-1. 克隆项目：
-   ```bash
-   git clone https://github.com/yourusername/mscan.git
-   cd mscan
-   ```
+### 环境要求
 
-2. 创建虚拟环境：
-   ```bash
-   python -m venv venv
-   
-   # Windows激活虚拟环境
-   venv\Scripts\activate
-   
-   # Linux/Mac激活虚拟环境
-   source venv/bin/activate
-   ```
+- Python 3.7+
+- pip 包管理器
 
-3. 安装依赖：
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## 使用方法
-
-### 基本用法
+### 安装
 
 ```bash
-python mscan.py -i <目标> [选项]
-```
-![alt text](image.png)
-![alt text](image-1.png)
-![alt text](image-2.png)
-### 扫描目标支持的格式
+# 方式一：pip 安装（推荐）
+pip install mscan
 
-- 单个IP: `python mscan.py -i 192.168.1.1`
-- CIDR格式: `python mscan.py -i 192.168.1.0/24`
-- IP范围: `python mscan.py -i 192.168.1.1-192.168.1.254`
-- 从文件读取: `python mscan.py -i @targets.txt`
-- 指定URL: `python mscan.py -u http://example.com`
-
-### 端口扫描选项
-
-```bash
-# 使用预定义端口模式
-python mscan.py -i 192.168.1.0/24 -m common  # 扫描常用端口
-python mscan.py -i 192.168.1.0/24 -m minimal # 仅扫描最基本端口
-python mscan.py -i 192.168.1.0/24 -m full    # 全端口扫描
-
-# 自定义端口
-python mscan.py -i 192.168.1.1 -p 80,443,8080-8090
+# 方式二：源码安装
+git clone https://github.com/yourusername/mscan.git
+cd mscan
+python setup.py install
 ```
 
-预定义端口模式：
-- `minimal`: 仅扫描 80,443,8080
-- `common`: 扫描常见服务端口
-- `full`: 扫描全部端口 (1-65535)
-
-### SSH 爆破选项
+### 使用示例
 
 ```bash
-# 使用自定义字典
-python mscan.py -i 192.168.1.1 --user-file users.txt --pass-file passwords.txt
+# 扫描单个目标
+mscan -i 192.168.1.1
 
-# 禁用 SSH 爆破
-python mscan.py -i 192.168.1.1 --no-ssh
+# 扫描网段
+mscan -i 192.168.1.0/24 -m common
+
+# Web 服务识别
+mscan -u http://example.com
 ```
 
-### Web 服务选项
+<details>
+<summary>📸 扫描结果展示</summary>
+
+![扫描结果](image.png)
+![Web识别](image-1.png)
+![报告展示](image-2.png)
+
+</details>
+
+## 📚 使用指南
+
+### 扫描目标格式
+
+- 单个IP：`192.168.1.1`
+- CIDR：`192.168.1.0/24`
+- IP范围：`192.168.1.1-192.168.1.254`
+- 文件导入：`@targets.txt`
+- URL：`http://example.com`
+
+### 常用命令
 
 ```bash
-# 仅扫描 Web 服务
-python mscan.py -u http://example.com
+# 常用端口扫描
+mscan -i 192.168.1.0/24 -m common
 
-# 禁用 Web 服务识别
-python mscan.py -i 192.168.1.1 --no-web
-```
+# 全端口扫描
+mscan -i 192.168.1.1 -m full
 
-### 输出选项
+# SSH 弱口令检测
+mscan -i 192.168.1.1 -p 22 --user-file users.txt --pass-file pass.txt
 
-```bash
 # 生成 HTML 报告
-python mscan.py -i 192.168.1.1 -o report.html
-
-# 生成 JSON 报告
-python mscan.py -i 192.168.1.1 -o report.json
-
-# 指定报告目录
-python mscan.py -i 192.168.1.1 --report-dir /path/to/reports
-
-# 禁用报告生成
-python mscan.py -i 192.168.1.1 --no-report
+mscan -i 192.168.1.1 -o report.html
 ```
 
-### 性能调优
-
-```bash
-# 调整线程数
-python mscan.py -i 192.168.1.0/24 -t 100
-
-# 详细输出
-python mscan.py -i 192.168.1.1 -v
-```
-
-## 完整参数说明
+<details>
+<summary>📋 完整参数说明</summary>
 
 ```
-参数:
-  -h, --help            显示帮助信息
-  -i, --ip IP          目标IP/CIDR/范围
-  -u, --url URL        目标URL
-  -f, --file FILE      从文件读取目标
-  -m, --mode {common,minimal,full}
-                       预定义端口扫描模式
-  -p, --ports PORTS    自定义端口列表
-  --no-web             禁用Web服务识别
-  --no-ssh             禁用SSH爆破
-  --user-file FILE     SSH用户名字典
-  --pass-file FILE     SSH密码字典
-  -o, --output FILE    输出文件路径
-  --no-report          禁用报告生成
-  --report-dir DIR     报告保存目录
-  -t, --threads N      线程数 (默认: 500)
-  -v, --verbose        详细输出模式
+-h, --help            显示帮助信息
+-i, --ip IP          目标IP/CIDR/范围
+-u, --url URL        目标URL
+-m, --mode MODE      扫描模式 (common/minimal/full)
+-p, --ports PORTS    自定义端口
+-t, --threads N      线程数 (默认: 500)
+-o, --output FILE    输出文件
+-v, --verbose        详细输出
+--no-web             禁用Web识别
+--no-ssh             禁用SSH检测
+--user-file FILE     用户名字典
+--pass-file FILE     密码字典
+--report-dir DIR     报告目录
 ```
 
-## 使用示例
+</details>
 
-1. 扫描内网C段并进行服务识别：
-```bash
-python mscan.py -i 192.168.1.0/24 -m common -t 100
+## 📦 项目结构
+
+```
+mscan/
+├── core/               # 核心功能模块
+│   ├── scanner.py     # 扫描器实现
+│   └── poc.py         # POC 基类
+├── lib/               # 功能库
+│   ├── scanners/      # 各类扫描器
+│   └── utils/         # 工具函数
+│       ├── http_utils.py    # HTTP 工具
+│       ├── logger.py        # 日志模块
+│       └── progress.py      # 进度显示
+├── data/              # 数据文件
+│   └── cms_finger.db  # CMS 指纹库
+└── pocs/              # POC 脚本
+    └── examples/      # POC 示例
 ```
 
-2. 对指定目标进行全端口扫描：
-```bash
-python mscan.py -i 192.168.1.1 -m full -o full_scan.html
+## 🔧 自定义 POC 开发
+
+您可以参考 `pocs/examples/example_poc.py` 开发自己的 POC：
+
+```python
+from core.poc import BasePOC
+
+class CustomPOC(BasePOC):
+    def __init__(self):
+        super().__init__()
+        self.name = "Custom POC Name"
+        self.description = "POC Description"
+        
+    def verify(self, target):
+        # 实现验证逻辑
+        return self.result
 ```
 
-3. 扫描指定URL并识别CMS：
-```bash
-python mscan.py -u http://example.com -o web_scan.html
-```
+详细开发指南请参考 [POC 开发文档](docs/poc_guide.md)
 
-4. 对SSH服务进行密码爆破：
-```bash
-python mscan.py -i 192.168.1.1 -p 22 --user-file users.txt --pass-file pass.txt
-```
+## ⚡ 性能建议
 
-## 注意事项
+- 生产环境建议使用较小线程数（-t 50）
+- 全端口扫描耗时较长，建议使用 common 模式
+- 大规模扫描时注意目标网络带宽
+- 使用 -v 参数可查看详细扫描进度
 
-1. 建议在测试环境中使用较大的线程数，在生产环境中使用较小的线程数
-2. 全端口扫描耗时较长，建议针对性使用 common 或 minimal 模式
-3. SSH 爆破功能请谨慎使用，避免账户锁定
-4. 建议使用 -v 参数查看详细扫描过程
-5. 扫描结果默认保存在 reports 目录下
+## 🤝 贡献指南
 
-## 贡献
+欢迎提交 Issue 和 Pull Request！详见 [贡献指南](CONTRIBUTING.md)。
 
-欢迎任何形式的贡献！请查看 [贡献指南](CONTRIBUTING.md) 以获取更多信息。
+## 📜 开源协议
 
-## 许可证
+本项目采用 [MIT](LICENSE) 开源协议。
 
-本项目采用 MIT 许可证，详细信息请查看 [LICENSE](LICENSE) 文件。
+## 👨‍💻 作者
 
-## 联系方式
+**Mscan** © [mzq](https://github.com/yourusername)  
 
-如有任何问题或建议，请联系作者 mzq，邮箱: mzq@example.com。
+---
+
+> [个人博客](https://your-blog.com) · GitHub [@yourusername](https://github.com/yourusername) · Email mzq@example.com
