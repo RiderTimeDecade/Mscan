@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Logo](path/to/logo.png)
+<img src="https://raw.githubusercontent.com/RiderTimeDecade/Mscan/main/assets/logo.png" width="120" height="120" alt="Mscan Logo">
 
 一款功能强大的内网安全扫描工具，集成端口扫描、服务识别、漏洞检测等功能。
 
@@ -48,7 +48,7 @@
 pip install mscan
 
 # 方式二：源码安装
-git clone https://github.com/yourusername/mscan.git
+git clone https://github.com/RiderTimeDecade/Mscan.git
 cd mscan
 python setup.py install
 ```
