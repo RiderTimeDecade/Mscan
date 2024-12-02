@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="assets/logo.png">
+<img src="assets/logo.svg" width="120" height="120" alt="Mscan Logo" style="background-color: white; padding: 10px; border-radius: 10px;">
 
 一款功能强大的内网安全扫描工具，集成端口扫描、服务识别、漏洞检测等功能。
 
@@ -153,10 +153,10 @@ mscan -i 192.168.1.1 -o report.html
 ```
 mscan/
 ├── assets/               # 资源文件
-│   ├── logo.png         # 项目logo
+│   ├── logo.svg         # 项目logo (条码扫描图标)
 │   ├── scan-result.png  # 端口扫描结果示例
-│   ├── web-detect.png   # Web服务识别示例
-│   └── report-demo.png  # 漏洞扫描报告示例
+│   ├── report-demo.png  # 漏洞扫描报告示例
+│   └── report-demo2.png # 漏洞扫描报告示例2
 ├── core/             # 核心功能模块
 │   ├── scanner.py   # 扫描器实现
 │   └── poc.py       # POC 基类
