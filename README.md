@@ -117,8 +117,7 @@ mscan -i 192.168.1.1 -o report.html
 - 用户名：anonymous, ftp, admin 等FTP常见用户
 - 密码：空密码、anonymous@、弱密码等
 
-<details>
-<summary>📋 完整参数说明</summary>
+## 📋 完整参数说明
 
 ```
 -h, --help            显示帮助信息
@@ -137,16 +136,11 @@ mscan -i 192.168.1.1 -o report.html
 --report-dir DIR     报告目录
 ```
 
-</details>
-
-<details>
-<summary>📸 扫描结果展示</summary>
+## 📸 扫描结果展示
 
 ![端口扫描结果](assets/scan-result.png)
 ![漏洞扫描报告](assets/report-demo.png)
 ![漏洞扫描报告](assets/report-demo2.png)
-
-</details>
 
 ## 📦 项目结构
 
