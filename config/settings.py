@@ -1,3 +1,5 @@
+import os
+
 # 扫描器配置
 THREADS = 500
 TIMEOUT = 3
@@ -112,10 +114,16 @@ PORT_MAP = {
     50000: 'DB2'
 }
 
+# 获取项目根目录
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 数据文件路径
+DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
+
 # SSH爆破配置
-DEFAULT_SSH_USER_FILE = 'data/users.txt'
-DEFAULT_SSH_PASS_FILE = 'data/passwords.txt'
+DEFAULT_SSH_USER_FILE = os.path.join(DATA_DIR, 'users.txt')
+DEFAULT_SSH_PASS_FILE = os.path.join(DATA_DIR, 'passwords.txt')
 
 # FTP爆破配置
-DEFAULT_FTP_USER_FILE = 'data/ftp_users.txt'
-DEFAULT_FTP_PASS_FILE = 'data/ftp_passwords.txt' 
+DEFAULT_FTP_USER_FILE = os.path.join(DATA_DIR, 'users.txt')
+DEFAULT_FTP_PASS_FILE = os.path.join(DATA_DIR, 'passwords.txt') 

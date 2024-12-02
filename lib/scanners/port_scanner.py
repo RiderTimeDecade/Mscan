@@ -1,5 +1,5 @@
 import ipaddress
-from typing import List, Generator, Union, Set
+from typing import List, Generator, Union, Set, Tuple
 import socket
 import concurrent.futures
 import logging
@@ -149,8 +149,18 @@ class IPScanner:
         except Exception as e:
             self.logger.error(f"Error parsing IP input {ip_input}: {str(e)}")
 
-    def check_port(self, ip: str, port: int, timeout: float = 1.0) -> tuple[bool, float]:
-        """检查端口是否开放，返回(是否开放, 响应时间)"""
+    def check_port(self, ip: str, port: int, timeout: float = 1.0) -> Tuple[bool, float]:
+        """
+        检查指定IP的端口是否开放
+        
+        Args:
+            ip: IP地址
+            port: 端口号
+            timeout: 超时时间
+            
+        Returns:
+            (is_open, response_time): 端口是否开放及响应时间
+        """
         start_time = time.time()
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -219,7 +229,7 @@ class IPScanner:
         try:
             # Windows系统
             if platform.system().lower() == 'windows':
-                # 使用ping命令，-n 1表示��送1个包，-w表示超时时间(毫秒)
+                # 使用ping命令，-n 1表示送1个包，-w表示超时时间(毫秒)
                 cmd = f'ping -n 1 -w {int(timeout*1000)} {ip}'
                 return subprocess.call(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0
             # Linux/Mac系统

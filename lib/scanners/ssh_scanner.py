@@ -22,32 +22,29 @@ class SSHBruteforce:
         self.current_attempts = 0
         self.errors = 0
         self.skip_ips = set()
-        self.valid_targets = set()  # 存储有效的目标
+        self.valid_targets = set()
         
-        # 默认用户名列表 - 最常见的优先
-        self.default_users = [
-            'root', 'admin',         # 超级管理员
-            'ubuntu', 'centos',      # 系统默认用户
-            'www', 'nginx',          # Web服务用户
-            'mysql', 'postgres',     # 数据库用户
-            'oracle', 'tomcat',      # 应用服务用户
-            'test', 'guest',         # 测试账号
-            'hadoop', 'ftp',         # 服务账号
-            'git', 'svn'             # 版本控制用户
-        ]
-        
-        # 默认密码列表 - 最常见的优先
-        self.default_passwords = [
-            '',                                         # 空密码
-            'root', 'admin', 'password',               # 简单密码
-            '1','123456', '12345', '123', '1234',         # 数字密码
-            '{user}', '{user}123', '{user}@123',      # 用户名变体
-            '{user}@2023', '{user}@2024',             # 年份变体
-            'P@ssw0rd', 'Admin@123', 'Root@123',      # 复杂密码
-            'admin123', 'root123', 'password123',      # 常见组合
-            'qwerty', 'abc123', '123qwe',             # 键盘组合
-            '1qaz@WSX', '1qaz2wsx'                    # 特殊组合
-        ]
+        # 从文件加载用户名和密码
+        self.default_users = self._load_users()
+        self.default_passwords = self._load_passwords()
+
+    def _load_users(self):
+        """从文件加载用户名列表"""
+        try:
+            with open(DEFAULT_SSH_USER_FILE, 'r') as f:
+                return [line.strip() for line in f if line.strip() and not line.startswith('#')]
+        except Exception as e:
+            print(f"{Fore.RED}[!] Error loading SSH users file: {e}{Style.RESET_ALL}")
+            return ['root', 'admin']  # 返回基本默认值
+
+    def _load_passwords(self):
+        """从文件加载密码列表"""
+        try:
+            with open(DEFAULT_SSH_PASS_FILE, 'r') as f:
+                return [line.strip() for line in f if line.strip() and not line.startswith('#')]
+        except Exception as e:
+            print(f"{Fore.RED}[!] Error loading SSH passwords file: {e}{Style.RESET_ALL}")
+            return ['', 'password']  # 返回基本默认值
 
     def verify_ssh(self, ip: str, port: int) -> bool:
         """快速验证SSH服务"""

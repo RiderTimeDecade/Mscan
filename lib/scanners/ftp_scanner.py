@@ -18,24 +18,27 @@ class FTPBruteforce:
         self.skip_ips = set()
         self.valid_targets = set()
         
-        # 默认用户名列表
-        self.default_users = [
-            'anonymous', 'ftp',      # 匿名访问
-            'admin', 'administrator', # 管理员账号
-            'root', 'user',          # 常见账号
-            'www', 'web',            # Web相关账号
-            'guest', 'test'          # 测试账号
-        ]
-        
-        # 默认密码列表
-        self.default_passwords = [
-            '',                      # 空密码
-            'anonymous@',            # 匿名密码
-            'ftp', 'admin',          # 简单密码
-            '123456', 'password',    # 常见密码
-            '{user}', '{user}123',   # 用户名变体
-            'ftp@123', 'admin@123'   # 组合密码
-        ]
+        # 从文件加载用户名和密码
+        self.default_users = self._load_users()
+        self.default_passwords = self._load_passwords()
+
+    def _load_users(self):
+        """从文件加载用户名列表"""
+        try:
+            with open(DEFAULT_FTP_USER_FILE, 'r') as f:
+                return [line.strip() for line in f if line.strip() and not line.startswith('#')]
+        except Exception as e:
+            print(f"{Fore.RED}[!] Error loading FTP users file: {e}{Style.RESET_ALL}")
+            return ['anonymous', 'ftp', 'admin']  # 返回基本默认值
+
+    def _load_passwords(self):
+        """从文件加载密码列表"""
+        try:
+            with open(DEFAULT_FTP_PASS_FILE, 'r') as f:
+                return [line.strip() for line in f if line.strip() and not line.startswith('#')]
+        except Exception as e:
+            print(f"{Fore.RED}[!] Error loading FTP passwords file: {e}{Style.RESET_ALL}")
+            return ['', 'anonymous@', 'ftp']  # 返回基本默认值
 
     def verify_ftp(self, ip: str, port: int) -> bool:
         """验证FTP服务是否可用"""
