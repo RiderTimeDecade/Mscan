@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="assets/logo.png" width="120" height="120" alt="Mscan Logo" style="background-color: white; padding: 10px; border-radius: 10px;">
+<img src="assets/logo.png">
 
 一款功能强大的内网安全扫描工具，集成端口扫描、服务识别、漏洞检测等功能。
 
