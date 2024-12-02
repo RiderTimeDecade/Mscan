@@ -144,6 +144,7 @@ mscan -i 192.168.1.1 -o report.html
 
 ![端口扫描结果](assets/scan-result.png)
 ![漏洞扫描报告](assets/report-demo.png)
+![漏洞扫描报告](assets/report-demo2.png)
 
 </details>
 
@@ -151,10 +152,11 @@ mscan -i 192.168.1.1 -o report.html
 
 ```
 mscan/
-├── assets/            # 资源文件
-│   ├── logo.png      # 项目logo
-│   ├── scan-result.png   # 扫描结果示例
-│   └── report-demo.png   # 报告示例
+├── assets/               # 资源文件
+│   ├── logo.png         # 项目logo
+│   ├── scan-result.png  # 端口扫描结果示例
+│   ├── web-detect.png   # Web服务识别示例
+│   └── report-demo.png  # 漏洞扫描报告示例
 ├── core/             # 核心功能模块
 │   ├── scanner.py   # 扫描器实现
 │   └── poc.py       # POC 基类
