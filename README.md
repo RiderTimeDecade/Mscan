@@ -152,23 +152,28 @@ mscan -i 192.168.1.1 -o report.html
 
 ```
 mscan/
-├── assets/               # 资源文件
-│   ├── logo.svg         # 项目logo (条码扫描图标)
-│   ├── scan-result.png  # 端口扫描结果示例
-│   ├── report-demo.png  # 漏洞扫描报告示例
-│   └── report-demo2.png # 漏洞扫描报告示例2
-├── core/             # 核心功能模块
-│   ├── scanner.py   # 扫描器实现
-│   └── poc.py       # POC 基类
-├── lib/             # 功能库
-│   ├── scanners/    # 各类扫描器
-│   └── utils/       # 工具函数
+├── mscan.py          # 主程序入口
+├── assets/           # 资源文件
+│   ├── logo.svg     # 项目logo
+│   └── images/      # 文档图片
 ├── config/          # 配置文件
 │   └── settings.py  # 全局配置
+├── lib/             # 功能库
+│   ├── scanners/    # 扫描器模块
+│   │   ├── __init__.py
+│   │   ├── port_scanner.py    # 端口扫描
+│   │   ├── ssh_scanner.py     # SSH扫描
+│   │   ├── web_scanner.py     # Web扫描
+│   │   └── vuln_scanner.py    # 漏洞扫描
+│   └── utils/       # 工具函数
+│       ├── __init__.py
+│       ├── http_utils.py      # HTTP工具
+│       ├── logger.py          # 日志模块
+│       ├── output.py          # 输出格式化
+│       └── progress.py        # 进度显示
 ├── data/            # 数据文件
-│   └── cms_finger.db # CMS 指纹库
-└── pocs/            # POC 脚本
-    └── examples/    # POC 示例
+│   └── cms_finger.db # CMS指纹库
+└── reports/         # 扫描报告输出目录
 ```
 
 ## ⚡ 性能建议
