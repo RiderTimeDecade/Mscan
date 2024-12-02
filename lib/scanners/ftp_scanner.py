@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from colorama import Fore, Style
 import time
 import socket
-from config.settings import THREADS, DEFAULT_FTP_USER_FILE, DEFAULT_FTP_PASS_FILE
+from config.settings import THREADS, FTP_USERS, FTP_PASSWORDS
 
 class FTPBruteforce:
     def __init__(self, threads=None):
@@ -18,27 +18,9 @@ class FTPBruteforce:
         self.skip_ips = set()
         self.valid_targets = set()
         
-        # 从文件加载用户名和密码
-        self.default_users = self._load_users()
-        self.default_passwords = self._load_passwords()
-
-    def _load_users(self):
-        """从文件加载用户名列表"""
-        try:
-            with open(DEFAULT_FTP_USER_FILE, 'r') as f:
-                return [line.strip() for line in f if line.strip() and not line.startswith('#')]
-        except Exception as e:
-            print(f"{Fore.RED}[!] Error loading FTP users file: {e}{Style.RESET_ALL}")
-            return ['anonymous', 'ftp', 'admin']  # 返回基本默认值
-
-    def _load_passwords(self):
-        """从文件加载密码列表"""
-        try:
-            with open(DEFAULT_FTP_PASS_FILE, 'r') as f:
-                return [line.strip() for line in f if line.strip() and not line.startswith('#')]
-        except Exception as e:
-            print(f"{Fore.RED}[!] Error loading FTP passwords file: {e}{Style.RESET_ALL}")
-            return ['', 'anonymous@', 'ftp']  # 返回基本默认值
+        # 直接使用配置中的用户名和密码列表
+        self.default_users = FTP_USERS
+        self.default_passwords = FTP_PASSWORDS
 
     def verify_ftp(self, ip: str, port: int) -> bool:
         """验证FTP服务是否可用"""
@@ -136,8 +118,20 @@ class FTPBruteforce:
 
     def scan(self, targets: Dict[str, Set[int]], userfile: str = None, passfile: str = None) -> Dict:
         """执行FTP扫描"""
-        self.userfile = userfile or DEFAULT_FTP_USER_FILE
-        self.passfile = passfile or DEFAULT_FTP_PASS_FILE
+        # 如果提供了自定义字典文件，则使用自定义字典
+        if userfile:
+            try:
+                with open(userfile, 'r', encoding='utf-8') as f:
+                    self.default_users = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+            except Exception as e:
+                print(f"{Fore.RED}[!] Error loading custom users file: {e}{Style.RESET_ALL}")
+                
+        if passfile:
+            try:
+                with open(passfile, 'r', encoding='utf-8') as f:
+                    self.default_passwords = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+            except Exception as e:
+                print(f"{Fore.RED}[!] Error loading custom passwords file: {e}{Style.RESET_ALL}")
         
         total_targets = sum(len(ports) for ports in targets.values())
         self.total_attempts = total_targets * len(self.default_users) * len(self.default_passwords)

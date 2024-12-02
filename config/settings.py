@@ -121,9 +121,73 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
 
 # SSH爆破配置
-DEFAULT_SSH_USER_FILE = os.path.join(DATA_DIR, 'users.txt')
-DEFAULT_SSH_PASS_FILE = os.path.join(DATA_DIR, 'passwords.txt')
+SSH_USERS = [
+    'root',
+    'admin',
+    'ubuntu',
+    'centos',
+    'www',
+    'nginx',
+    'mysql',
+    'postgres',
+    'oracle',
+    'tomcat'
+]
+
+SSH_PASSWORDS = [
+    '',  # 空密码
+    'root',
+    '1',
+    'admin',
+    'password',
+    '123456',
+    '12345',
+    '123',
+    '1234',
+    '12345678',
+    '{user}',
+    '{user}123',
+    '{user}@123',
+    '{user}@2023',
+    '{user}@2024',
+    'P@ssw0rd',
+    'Admin@123',
+    'Root@123',
+    'admin123',
+    'root123',
+    'password123',
+    'qwerty',
+    'abc123',
+    '123qwe',
+    '1qaz@WSX',
+    '1qaz2wsx'
+]
 
 # FTP爆破配置
-DEFAULT_FTP_USER_FILE = os.path.join(DATA_DIR, 'users.txt')
-DEFAULT_FTP_PASS_FILE = os.path.join(DATA_DIR, 'passwords.txt') 
+FTP_USERS = [
+    'anonymous',
+    'ftp',
+    'admin',
+    'www',
+    'root',
+    'guest',
+    'test'
+]
+
+FTP_PASSWORDS = [
+    '',  # 空密码
+    'anonymous',
+    'anonymous@',
+    'ftp',
+    'ftp@123',
+    'admin',
+    '123456',
+    '12345',
+    'password',
+    '{user}',
+    '{user}123',
+    '{user}@123',
+    'admin123',
+    'test123',
+    'guest'
+] 

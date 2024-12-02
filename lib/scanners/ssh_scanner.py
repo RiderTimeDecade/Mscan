@@ -8,7 +8,7 @@ import time
 import socket
 import logging
 from lib.utils.logger import setup_logger
-from config.settings import THREADS, DEFAULT_SSH_USER_FILE, DEFAULT_SSH_PASS_FILE
+from config.settings import THREADS, SSH_USERS, SSH_PASSWORDS
 
 # 禁用 paramiko 的警告日志
 logging.getLogger('paramiko').setLevel(logging.CRITICAL)
@@ -24,27 +24,9 @@ class SSHBruteforce:
         self.skip_ips = set()
         self.valid_targets = set()
         
-        # 从文件加载用户名和密码
-        self.default_users = self._load_users()
-        self.default_passwords = self._load_passwords()
-
-    def _load_users(self):
-        """从文件加载用户名列表"""
-        try:
-            with open(DEFAULT_SSH_USER_FILE, 'r') as f:
-                return [line.strip() for line in f if line.strip() and not line.startswith('#')]
-        except Exception as e:
-            print(f"{Fore.RED}[!] Error loading SSH users file: {e}{Style.RESET_ALL}")
-            return ['root', 'admin']  # 返回基本默认值
-
-    def _load_passwords(self):
-        """从文件加载密码列表"""
-        try:
-            with open(DEFAULT_SSH_PASS_FILE, 'r') as f:
-                return [line.strip() for line in f if line.strip() and not line.startswith('#')]
-        except Exception as e:
-            print(f"{Fore.RED}[!] Error loading SSH passwords file: {e}{Style.RESET_ALL}")
-            return ['', 'password']  # 返回基本默认值
+        # 直接使用配置中的用户名和密码列表
+        self.default_users = SSH_USERS
+        self.default_passwords = SSH_PASSWORDS
 
     def verify_ssh(self, ip: str, port: int) -> bool:
         """快速验证SSH服务"""
@@ -165,8 +147,22 @@ class SSHBruteforce:
         return self.try_login(ip, port, username, password)
 
     def scan(self, targets, userfile=None, passfile=None):
-        self.userfile = userfile or DEFAULT_SSH_USER_FILE
-        self.passfile = passfile or DEFAULT_SSH_PASS_FILE
+        """执行SSH扫描"""
+        # 如果提供了自定义字典文件，则使用自定义字典
+        if userfile:
+            try:
+                with open(userfile, 'r', encoding='utf-8') as f:
+                    self.default_users = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+            except Exception as e:
+                print(f"{Fore.RED}[!] Error loading custom users file: {e}{Style.RESET_ALL}")
+            
+        if passfile:
+            try:
+                with open(passfile, 'r', encoding='utf-8') as f:
+                    self.default_passwords = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+            except Exception as e:
+                print(f"{Fore.RED}[!] Error loading custom passwords file: {e}{Style.RESET_ALL}")
+
         # 计算总尝试次数
         total_targets = sum(len(ports) for ports in targets.values())
         self.total_attempts = total_targets * len(self.default_users) * len(self.default_passwords)
