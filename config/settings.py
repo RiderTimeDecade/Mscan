@@ -122,16 +122,16 @@ DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
 
 # SSH爆破配置
 SSH_USERS = [
-    'root',
-    'admin',
-    'ubuntu',
-    'centos',
-    'www',
-    'nginx',
-    'mysql',
-    'postgres',
-    'oracle',
-    'tomcat'
+    'root',      # Linux系统root用户
+    'admin',     # 通用管理员账号
+    'ubuntu',    # Ubuntu默认用户
+    'centos',    # CentOS默认用户
+    'www',       # Web服务用户
+    'nginx',     # Nginx服务用户
+    'mysql',     # MySQL数据库用户
+    'postgres',  # PostgreSQL数据库用户
+    'oracle',    # Oracle数据库用户
+    'tomcat'     # Tomcat服务用户
 ]
 
 SSH_PASSWORDS = [
@@ -165,13 +165,13 @@ SSH_PASSWORDS = [
 
 # FTP爆破配置
 FTP_USERS = [
-    'anonymous',
-    'ftp',
-    'admin',
-    'www',
-    'root',
-    'guest',
-    'test'
+    'anonymous', # 匿名用户
+    'ftp',       # FTP默认用户
+    'admin',     # 管理员账号
+    'www',       # Web服务用户
+    'root',      # 超级用户
+    'guest',     # 访客账号
+    'test'       # 测试账号
 ]
 
 FTP_PASSWORDS = [
