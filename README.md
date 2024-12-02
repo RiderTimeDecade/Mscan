@@ -2,13 +2,13 @@
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/RiderTimeDecade/Mscan/main/assets/logo.png" width="120" height="120" alt="Mscan Logo">
+<img src="assets/logo.png" width="120" height="120" alt="Mscan Logo" style="background-color: white; padding: 10px; border-radius: 10px;">
 
 一款功能强大的内网安全扫描工具，集成端口扫描、服务识别、漏洞检测等功能。
 
 [![Python Version](https://img.shields.io/badge/python-3.9+-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/yourusername/mscan?style=social)](https://github.com/yourusername/mscan)
+[![GitHub Stars](https://img.shields.io/github/stars/RiderTimeDecade/Mscan?style=social)](https://github.com/RiderTimeDecade/Mscan)
 
 [English](README_EN.md) | 简体中文 | [使用文档](docs/guide.md) | [更新日志](CHANGELOG.md)
 
@@ -139,28 +139,40 @@ mscan -i 192.168.1.1 -o report.html
 
 </details>
 
+<details>
+<summary>📸 扫描结果展示</summary>
+
+![端口扫描结果](assets/scan-result.png)
+![漏洞扫描报告](assets/report-demo.png)
+
+</details>
+
 ## 📦 项目结构
 
 ```
 mscan/
-├── core/               # 核心功能模块
-│   ├── scanner.py     # 扫描器实现
-│   └── poc.py         # POC 基类
-├── lib/               # 功能库
-│   ├── scanners/      # 各类扫描器
-│   └── utils/         # 工具函数
-├── config/            # 配置文件
-│   └── settings.py    # 全局配置
-├── data/              # 数据文件
-│   └── cms_finger.db  # CMS 指纹库
-└── pocs/              # POC 脚本
-    └── examples/      # POC 示例
+├── assets/            # 资源文件
+│   ├── logo.png      # 项目logo
+│   ├── scan-result.png   # 扫描结果示例
+│   └── report-demo.png   # 报告示例
+├── core/             # 核心功能模块
+│   ├── scanner.py   # 扫描器实现
+│   └── poc.py       # POC 基类
+├── lib/             # 功能库
+│   ├── scanners/    # 各类扫描器
+│   └── utils/       # 工具函数
+├── config/          # 配置文件
+│   └── settings.py  # 全局配置
+├── data/            # 数据文件
+│   └── cms_finger.db # CMS 指纹库
+└── pocs/            # POC 脚本
+    └── examples/    # POC 示例
 ```
 
 ## ⚡ 性能建议
 
 - 生产环境建议使用较小线程数（-t 50）
-- 全端口扫描耗时较长，建议使用 common 模式
+- 全端口扫描耗时较长，建使用 common 模式
 - 大规模扫描时注意目标网络带宽
 - 使用 -v 参数可查看详细扫描进度
 - 弱口令检测建议使用自定义小型字典提高效率
@@ -175,8 +187,8 @@ mscan/
 
 ## 👨‍💻 作者
 
-**Mscan** © [mzq](https://github.com/yourusername)  
+**Mscan** © [RiderTimeDecade](https://github.com/RiderTimeDecade)  
 
 ---
 
-> [个人博客](https://your-blog.com) · GitHub [@yourusername](https://github.com/yourusername) · Email mzq@example.com
+> GitHub [@RiderTimeDecade](https://github.com/RiderTimeDecade)
